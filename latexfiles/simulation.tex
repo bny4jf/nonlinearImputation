@@ -99,7 +99,42 @@ NOTES:
 
 We also have the UNR simulation in January 2021, except we did 5,000 iterations, sample size 1-2-4,000; included Oracle results for 2,3,4 and 5 "Z"-s (one of them is the constant!).
 
-We should see that for the Z=5 case things are not better anymore. Probably need to explain we still have root-n consistency for the imputation estimator, because of the weighting matrix!
+We should see that for the Z=6 case things are not better anymore. Probably need to explain we still have root-n consistency for the imputation estimator, because of the weighting matrix!
+
+(We observed some instability for the imputation estimator at n=1000 for some iterations, but the numbers are `not cleaned' below, which means some of the unusually high values at 1000 may be due to this. We also see increased simulation error when the number of Z-s > 3. In addition, the bandwidth rate is 0.33, and it is not optimal + I think n= 1,000 is not large sample yet, because the average MSEs are highly effected by the df.)
+
+\begin{table}
+\begin{tabular}{l|c|c|c|c}
+Estimators	& Full sample & Complete case & Oracle & Imputation \\
+\hline
+No. Z is 2 &&&& \\
+\hline
+n=1000 & 0.014 & 0.031 & 0.025 & 0.027 \\
+n=2000 & 0.007 & 0.014 & 0.011 & 0.012 \\
+n=4000 & 0.003 & 0.007 & 0.005 & 0.005 \\ 
+\hline
+No. Z is 3 &&&& \\
+\hline
+n=1000 & 0.016 & 0.041 & 0.031 & 0.036 \\
+n=2000 & 0.008 & 0.018 & 0.012 & 0.014 \\
+n=4000 & 0.004 & 0.009 & 0.006 & 0.007 \\ 
+\hline
+No. Z is 4 &&&& \\
+\hline
+n=1000 &0.015 & 0.040& 0.032 & 6.671 \\
+n=2000 & 0.007 & 0.017 & 0.012 & 0.014 \\
+n=4000 & 0.003 & 0.008 & 0.005 & 0.006 \\ 
+\hline
+No. Z is 6 &&&& \\
+\hline
+	n=1000 & 0.016 & 0.052 & 0.059 & 47.7 \\
+	n=2000 & 0.007 & 0.020 & 0.014 & 0.028 \\
+	n=4000 & 0.003 & 0.009 & 0.006 & 0.012 \\ 
+\end{tabular}
+\caption{Average MSE-s (across all estimated coefficients).}
+\end{table}	
+
+\newpage
 
 The raw results are verbatim below the MSE table.
 

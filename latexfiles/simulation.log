@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.5.31)  8 APR 2022 07:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.5.31)  8 APR 2022 09:34
 entering extended mode
 **./simulation.tex
 (simulation.tex
@@ -234,145 +234,145 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 88.
  [3] [4] [5] [6] [7] [8] [9]
-Overfull \hbox (38.24666pt too wide) in paragraph at lines 380--380
+Overfull \hbox (38.24666pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[ 1.02725622  0.5176001  -2.05864265  1.23721569 -0.7210690
 5  0.31020889[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.07123975  0.54008013 -2.14637137  1.29162637 -0.75003755
   0.32440195[] 
  []
 
-
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+[10]
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.1921295   0.57989283 -2.33978741  1.39230093 -0.82495065
   0.35665218[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.4996324   0.89112044 -3.08191948  1.97792953 -1.03554466
   0.39465755[] 
  []
 
 
-Overfull \hbox (38.24666pt too wide) in paragraph at lines 380--380
+Overfull \hbox (38.24666pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[ 0.12954025  0.10149575  0.17274183  0.12996276  0.0906369
 4  0.07967804[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 0.21711901  0.18086076  0.30319765  0.23741623  0.14984034
   0.13398944[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 2.97397908  0.87117646  4.53042755  2.25323743  1.68964042
   0.78757515[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 7.01029255  3.51006939 12.13844962  7.76745485  4.69750453
   1.91450644[] 
  []
 
 
-Overfull \hbox (38.24666pt too wide) in paragraph at lines 380--380
+Overfull \hbox (38.24666pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[ 1.01470954  0.50724365 -2.0306106   1.21785328 -0.7115173
 2  0.30471889[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.03106299  0.51723994 -2.06647681  1.24041647 -0.72394697
   0.30909333[] 
  []
 
-[10]
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 380--380
+
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.04045138  0.52138167 -2.08772044  1.25236737 -0.73119327
   0.3131551[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.0138901   0.61210066 -2.17333147  1.3788245  -0.72449483
   0.28192102[] 
  []
 
 
-Overfull \hbox (6.74693pt too wide) in paragraph at lines 380--380
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[0.08961579 0.07054348 0.11596102 0.08703768 0.06134015 0.0
 5491414[] 
  []
 
 
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.13878747 0.1185509  0.18735632 0.15032367 0.09772463 0.08
 766628[] 
  []
 
 
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.14242275 0.07867273 0.15073804 0.10206377 0.07777906 0.06
 720136[] 
  []
 
-
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+[11]
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.14175696 0.08854494 0.16819501 0.11907604 0.08365428 0.07
 090414[] 
  []
 
 
-Overfull \hbox (38.24666pt too wide) in paragraph at lines 380--380
+Overfull \hbox (38.24666pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[ 1.00581683  0.50204505 -2.01101345  1.20655051 -0.7044911
 7  0.30238619[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.0131092   0.50663293 -2.02959267  1.21728989 -0.71112976
   0.30383917[] 
  []
 
 
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 380--380
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.01730848  0.50879099 -2.03796274  1.222628   -0.71391768
   0.3060213[] 
  []
 
 
-Overfull \hbox (32.9967pt too wide) in paragraph at lines 380--380
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [ 1.00034329  0.5753309  -2.10107245  1.31627904 -0.70864686
   0.28371132[] 
  []
 
 
-Overfull \hbox (6.74693pt too wide) in paragraph at lines 380--380
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [[0.06151435 0.04881332 0.08100703 0.06169968 0.04331079 0.0
 3766353[] 
  []
 
 
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.09619565 0.08319213 0.12715765 0.10371681 0.06733829 0.05
 943197[] 
  []
 
-[11]
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.09718725 0.05382577 0.09993611 0.068655   0.05333421 0.04
 481709[] 
  []
 
 
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 380--380
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 415--415
 []\OT1/cmtt/m/n/10 [0.09628772 0.06013854 0.10843431 0.07732557 0.05616947 0.04
 730025[] 
  []
@@ -385,11 +385,11 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  2537 strings out of 492895
  33686 string characters out of 3123735
- 103250 words of memory out of 3000000
+ 104250 words of memory out of 3000000
  6425 multiletter control sequences out of 15000+200000
  12604 words of font info for 49 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,13n,27p,1086b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 37i,13n,27p,1086b,254s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/harry/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb><C:/Users/harry/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmbx12.pfb><C:/Users/harry/AppData/Local/Programs/MiKTeX 2.9/f
@@ -408,7 +408,7 @@ arry/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pf
 b><C:/Users/harry/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmsy7.pfb><C:/Users/harry/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/cm/cmtt10.pfb>
-Output written on simulation.pdf (12 pages, 184713 bytes).
+Output written on simulation.pdf (12 pages, 186736 bytes).
 PDF statistics:
  101 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
