@@ -8,7 +8,7 @@ Explanatory Monte Carlo simulation for imputation project: probit model with a
 single imputed occasionally missing RHS variable (x) using one, two, five other
 (non-missing) RHS variables (z-s)
 
-Packages needed: numpy, scipy
+Packages needed: numpy, scipy, multiprocessing, random
 
 NOTES:
 - we regenerate the missingness indicators every time
@@ -20,6 +20,7 @@ from scipy import linalg
 from scipy.stats import norm as normal
 import time
 import multiprocessing as mp
+import random
 
 #############################
 #   SIMULATION PARAMETERS   #
@@ -27,21 +28,24 @@ import multiprocessing as mp
 
 # True values
 alpha = 1
-beta = [0.5, -2]
+#beta = [0.5, -2]
+beta = [0.5, -2, 1.2, -0.7, 0.3, 1]#, -1.2]
+
 
 # Initial values
 a0 = 0
-b0 = [0, 0]
+#b0 = [0, 0]
+b0 = [0, 0, 0, 0, 0, 0]#, 0, 0]
 
 # Replication number, sample sizes
-reps = 50
-nlist = [4000, 16000]
+reps = 5000
+nlist = [1000, 2000, 4000]
 
 # File names (fname is req'd, stores the aggregate results, resultsFname
 # can be set to False)
-fname = 'prob.txt'
-resultsFname = 'prob'
-cores= mp.cpu_count()-4
+fname = '5ZsO124.txt'
+resultsFname = '5ZsO124'
+cores= mp.cpu_count()-2
 
 # Random seed (not implemented), noisiness (should be True only for dev)
 seed = 2433523
@@ -156,12 +160,12 @@ def gmmFullData(y, x, z, a0, b0, weighting_iteration=1, noise=False):
     for i in range(weighting_iteration):
         optimum = opt.minimize(
                     fullDataMoments, coeffs0, args=(y, x, z, weight),
-                    method='BFGS')
+                    method='Newton-CG', jac=fullDataJacobian)
         coeffs0 = optimum.x
         weight = fullDataWeights(coeffs0, y, x, z)
     optimum = opt.minimize(
                 fullDataMoments, coeffs0, args=(y, x, z, weight),
-                method='BFGS')
+                method='Newton-CG', jac=fullDataJacobian)
     if noise:
         print(optimum.message)
     return optimum.x
@@ -188,11 +192,29 @@ def gmmNonMissingData(y, x, z, m, a0, b0, weighting_iteration=1, noise=False):
     return gmmFullData(y, x, z, a0, b0, weighting_iteration, noise)
 
 
+def fullDataJacobian(coeffs, y, x, z, weight=None):
+    residuals1 =  y-normal.cdf(x * coeffs[0] + np.sum(z * coeffs[1:],
+                                                      axis=1, keepdims=True))        
+    moments = np.matrix(np.mean(np.hstack((x * residuals1,
+                                       z * residuals1)), axis=0))  
+
+    residuals1Der = normal.pdf(x * coeffs[0] + np.sum(z * coeffs[1:],
+                                                      axis=1, keepdims=True))
+    xTilde =np.hstack((x, z))
+    momentsDer = np.matrix(np.einsum('ij,ik -> jk',
+                                     xTilde * residuals1Der, xTilde)/len(y))
+    if weight is None:
+        weight = np.matrix(np.identity(moments.shape[1]))
+        
+    return -np.asarray(2 * (momentsDer * weight * moments.transpose())) \
+                     .transpose()[0]
+
+
 def probXCondlZ(xx, zz, xVals, zs, bwidth):
     """ Takes xx and zz the non-missing part of the sample, grid values from
     xVals and an n-by-k+1 array of (z, m) values (2D array) from the data set,
     and returns the kernel estimates for P[X=x|Z=z] for every x in xVals
-    and z in zs as an n-by-xVals.shape[1] array. bwidth (list of 2 floats)
+    and z in zs as an n-by-xVals.shape[0] array. bwidth (list of 2 floats)
     contains the bandwidths to calculate the Nadaraya-Watson estimator for the
     conditional probabilities.
     """
@@ -234,17 +256,16 @@ def probXCondlZSpline(xx, zz, xVals, zs, knotno):
 
 
 def probXCondlZOracle(z, xVals):
-    """ Takes the z-s (1D array) and grid values from xVals (1D array),
+    """ Takes the z-s (n-by-kz 2D array) and grid values from xVals (1D array),
     and returns the true value for P[X=x|Z=z] for every x in xVals and z in z
-    as an n-by-xVals.shape[1] array.
+    as an n-by-xVals.shape[0] array.
     """
-    if z.shape[1] > 1:
-        zs = z[:, 1]
-    else:
-        zs = z
-    z_stack = np.stack([zs] * xVals.shape[0], axis=1)
+
+    zcoeffs = np.array([0.6, -0.4, 0.7, 0.1, -0.3, 0.9, 1, -1, 0.5, -0.2]
+                      [:z.shape[1]])
+    z_stack = np.stack([np.sum(z * zcoeffs, axis=1)] * xVals.shape[0], axis=1)
     x_stack = np.stack([xVals] * z.shape[0])
-    results = normal.pdf(-np.log(4 / (x_stack + 2) - 1) - 0.6 + 0.4 * z_stack)\
+    results = normal.pdf(-np.log(4 / (x_stack + 2) - 1) - z_stack)\
         * 4 / (4 - x_stack**2)
     return results/np.sum(results, axis=1, keepdims=True)
 
@@ -269,6 +290,23 @@ def yCondlOnZ(coeffs, probs, x, z, gridno):
     expectedYs = normal.cdf(xGrid * coeffs[0] + np.sum(z * coeffs[1:],
                                                        axis=1, keepdims=True))
     return np.sum(probs * expectedYs, axis=1, keepdims=True)
+
+
+def yCondlOnZDer(coeffs, probs, x, z, gridno):
+    """ This is a not-so-dumb, but still very basic grid implementation of
+    numerical integration for our simulation.
+    Arguments:
+    """
+    # grid: make it a n-by-gridno array
+    xGrid = np.stack([np.linspace(start=-2, stop=2, num=gridno)] * len(x))
+    expectedYsDerZ = normal.pdf(xGrid * coeffs[0] + np.sum(z * coeffs[1:],
+                                                       axis=1, keepdims=True))
+    expectedYsDerX = xGrid * normal.pdf(xGrid * coeffs[0] 
+                                        + np.sum(z * coeffs[1:],
+                                                 axis=1, keepdims=True))
+
+    return [np.sum(probs * expectedYsDerZ, axis=1, keepdims=True), \
+            np.sum(probs * expectedYsDerX, axis=1, keepdims=True)]
 
 
 def yCondlOnZDirect(coeffs, xx, zz, z, bwidth):
@@ -384,6 +422,43 @@ def imputeMomentsWeightsDirect(coeffs, y, x, z, m, xx, zz, bwidth):
     return linalg.inv((moments.transpose() * moments) / y.shape[0])
 
 
+def imputeMomentsJacobian(coeffs, probs, y, x, z, m, gridno, weight):
+    residuals1 = (1 - m) * (y-normal.cdf(x * coeffs[0]
+                                         + np.sum(z * coeffs[1:],
+                                                  axis=1, keepdims=True)))        
+    residuals2 = m * (y - yCondlOnZ(coeffs, probs, x, z, gridno))
+
+    moments = np.matrix(np.mean(np.hstack((x * residuals1,
+                                       z * residuals1,
+                                       z * residuals2)), axis=0))  
+
+    residuals1Der = (1 - m) * (normal.pdf(x * coeffs[0]
+                                         + np.sum(z * coeffs[1:],
+                                                  axis=1, keepdims=True)))
+
+    xTilde =np.hstack((x,z))
+    residuals2DerZ = m * (yCondlOnZDer(coeffs, probs, x, z, gridno)[0])
+    residuals2DerX = m * (yCondlOnZDer(coeffs, probs, x, z, gridno)[1])
+    momentsDer0 = np.einsum('ij,ik -> jk', xTilde * residuals1Der, xTilde) \
+                 /len(y)
+    momentsDer1 = np.einsum('ij,ik -> jk', z * residuals2DerZ, z) \
+                 /len(y)
+    momentsDer2 = np.mean(z * residuals2DerX, axis=0)
+    
+    momentsDer= np.matrix(np.hstack((momentsDer0,
+                                     np.vstack((momentsDer2, momentsDer1)))))  
+    if weight is None:
+        weight = np.matrix(np.identity(moments.shape[1]))
+        
+    return -np.asarray(2 * (momentsDer * weight * moments.transpose())) \
+                     .transpose()[0]
+
+    
+def imputeMomentsHessian(coeffs, probs, y, x, z, m, gridno, weight=None):
+    
+    return
+
+
 def gmmImpute(y, x, z, m, a0, b0, gridno, weighting_iteration=1, 
               method='spline', direct=True, noise=False):
     """ The feasible GMM estimator that adds the analogues of the AD 2017
@@ -416,7 +491,7 @@ def gmmImpute(y, x, z, m, a0, b0, gridno, weighting_iteration=1,
         knotno = int(gridno / (np.exp(n**1/2) + 1))
         probs = probXCondlZSpline(xx, zz, xVals, np.hstack((z, m)), knotno)
     elif method == 'NW':
-        bwidth1 = [2.154 * n**(-1/3), 1.077 * n**(-1/3)]
+        bwidth1 = [2.154 * n**(-1/4), 1.077 * n**(-1/3)]
         if direct:
             bwidth1 = 1.77 * n**(-1/3)
         else:
@@ -443,16 +518,18 @@ def gmmImpute(y, x, z, m, a0, b0, gridno, weighting_iteration=1,
             optimum = opt.minimize(
                         imputeMoments, coeffs0,
                         args=(probs, y, x, z, m, gridno, weight),
-                        method='BFGS')
+                        method='Newton-CG',
+                        jac=imputeMomentsJacobian)
             coeffs0 = optimum.x
             weight = imputeMomentsWeights(coeffs0, probs, y, x, z, m, gridno)
         optimum = opt.minimize(
                 imputeMoments, coeffs0,
                 args=(probs, y, x, z, m, gridno, weight),
-                method='BFGS')
+                method='Newton-CG',
+                jac=imputeMomentsJacobian)
     if noise:
         print('\n')
-        print(optimum)
+        print(optimum, flush=True)
         print('\n')
     return optimum.x
 
@@ -503,7 +580,7 @@ def gmmMarginalizedImpute(y, x, z, m, a0, b0, gridno, bwidth, noise=False):
                 args=(probsvector, y, x, z, m, gridno), method='BFGS',
                 options={'disp': noise})
     if noise:
-        print(optimum.x)
+        print(optimum.x, flush=True)
     return optimum.x
 
 
@@ -515,14 +592,14 @@ def iteration(n, noise=False):
     """
     # bwidth2 = [0.1, 0.1]
     y, x, z, m = dgp(alpha, beta, n, noise)
-    fullDataRes = gmmFullData(y, x, z, a0, b0, 1, noise=False)
-    nonMissingDataRes = gmmNonMissingData(y, x, z, m, a0, b0, 1, noise=False)
-#    imputeOracleRes = gmmImpute(y, x, z, m, a0, b0, gridno, 1, 'oracle', noise)
+    fullDataRes = gmmFullData(y, x, z, a0, b0, 1, noise)
+    nonMissingDataRes = gmmNonMissingData(y, x, z, m, a0, b0, 1, noise)
+    imputeOracleRes = gmmImpute(y, x, z, m, a0, b0, gridno, 1, 'oracle', direct, noise)
     imputeNWRes = gmmImpute(y, x, z, m, a0, b0, gridno, 1, 'NW', direct, noise)
     # marginalizedImputeRes = gmmMarginalizedImpute(y, x, z, m, a0, b0, gridno,
     #                                              bwidth2, noise)
     # DO THE STUFF: BLOCK MATRIX
-    return np.array((fullDataRes, nonMissingDataRes, imputeNWRes))
+    return np.array((fullDataRes, nonMissingDataRes, imputeOracleRes, imputeNWRes))
 # , marginalizedImputeRes))
         
 
@@ -531,7 +608,7 @@ def multiIteration(task_queue, done_queue):
             args = task_queue.get()
             if args == 'STOP':
                 break
-            result = iteration(args)
+            result = iteration(args, noise)
             print(result)
             done_queue.put(result)
 
@@ -571,6 +648,7 @@ def montecarloMulti(oldfuggveny):
         
         for i in range(cores):      # starting the jobs
             jobs[i].start()
+            time.sleep(1)
         
         for i in range(cores):      # giving the pill
             task_queue.put('STOP') 
@@ -603,7 +681,6 @@ def montecarloMulti(oldfuggveny):
             f.write('\n\nThis took ' + str(time.time() - t0) + ' s\n')
 
     
-
 if __name__== '__main__':
     mp.freeze_support()
     
@@ -616,7 +693,7 @@ if __name__== '__main__':
                 + str(seed) + '\nreps= ' + str(reps) + '\n' 
                 + 'direct:' + str(direct) + '\n')
     
-    np.random.seed(seed)
+    random.seed(seed)
     montecarloMulti(multiIteration)
     print('\a')
 
